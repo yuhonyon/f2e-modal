@@ -1,0 +1,22 @@
+{
+  "name": "modal",
+  "version": "1.0.0",
+  "description": "弹框&&模态框",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "travis-publish": "node node_modules/travis-release/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuhonyon/f2e-modal.git"
+  },
+  "author": "yufangyang",
+  "license": "ISC",
+  "dependencies": {
+    "@fastweb/event": "^1.0.2"
+  },
+  "devDependencies": {
+    "travis-release": "^1.0.0"
+  }
+}
