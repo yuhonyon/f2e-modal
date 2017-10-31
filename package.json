@@ -1,5 +1,5 @@
 {
-  "name": "modal",
+  "name": "@fastweb/modal",
   "version": "1.0.0",
   "description": "弹框&&模态框",
   "main": "src/index.js",
