@@ -1,9 +1,14 @@
 import EventTarget from "@fastweb/event";
-
+import './modal.scss';
+window.f2eModalZIndex=9999;
 export default class Modal extends EventTarget{
-  constructor(options) {
+  constructor(options,element) {
     super();
-
+    f2eModalZIndex++;
+    this.f2eModalZIndex=f2eModalZIndex;
+    if(element){
+      this.$element=$(element);
+    }
     this.defaults = {
       backdrop: true, //true,false,static
       show: false,
@@ -18,6 +23,7 @@ export default class Modal extends EventTarget{
       icon: 'logo', //ok,error,warning,img.src
       btn: null,
       mold: '',//alert,confirm,toast
+      value:'',
       animation: [
         'fadeIn', 'fadeOut'
       ], //['slideInUp', 'slideOutDown'],['slideInDown', 'slideOutUp']
@@ -45,7 +51,7 @@ export default class Modal extends EventTarget{
     this._timer = {};
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
-    this.alert = this.alert.bind(this);
+
     this.destroy = this.destroy.bind(this);
 
 
@@ -66,93 +72,46 @@ export default class Modal extends EventTarget{
     this.options = $.extend(false, {}, this.defaults, options);
     if (options) {
       this._creatModal();
-      this._location();
+
       if (this.options.show) {
         this.show();
       }
     }
     this.emit("onInit", this);
   }
-
-  alert(mes, title, cb = this.destroy) {
-
-    this.options = $.extend(true,{}, this.defaults, {
-      backdrop: 'static',
-      content: mes,
-      btn: null,
-      title: null,
-      icon: 'logo',
-      mold: 'alert',
-      show: true
-    });
-
-    if ($.isFunction(title)) {
-      this.options.btn = {
-        '确定': title
-      };
-    } else if (typeof title === 'string') {
-      this.options.title = title;
-    } else {
-      this.options.btn = {
-        '确定': cb
-      };
-    }
-
-    // let alertModal=new Modal(this.options);
-    // if(this.options.mold!=='alert'){
-    //   this.destroy();
-    //   this._creatModal();
-    //   this._location();
-    //
-    // }
-    //
-    // this.show();
+  _changeContent(content){
+    this.$modalContent.html(content)
+    return this;
   }
-
-  confirm(mes, title = null, sucCb = this.hide, errCb = this.hide) {
-    this.destroy();
-    if ($.isFunction(title)) {
-      errCb = sucCb;
-      sucCb = title;
-      title = null;
-    }
-    this.options = $.extend(true, this.defaults, {
-      backdrop: 'static',
-      content: mes,
-      btn: {
-        "确定": sucCb,
-        "取消": errCb
-      },
-      title: title,
-      icon: 'logo'
-    });
-
-    this._creatModal();
-    this._location();
-    this.show();
+  _changeOptions(options){
+    this.options=$.extend(true,this.options,options)
+    return this;
   }
-
-  toast(mes, time = 1000) {
-    this.destroy();
-    this.options = $.extend(true, this.defaults, {
-      backdrop: false,
-      content: mes,
-      btn: null,
-      time: time,
-      title: null,
-      icon: null
-    });
-    this._creatModal();
-
-    this.$modalContainer.addClass(this.options.toastClass);
-    this._location();
-    this.show();
-
-  }
-
   _creatModal() {
-    this.$backdrop = $("<div class='" + this.options.backdropClass + "'></div>");
-    this.$modalContainer = $("<div class='" + this.options.containerClass + "'></div>");
+    if(this.options.backdrop){
+      this.$backdrop = $("<div style='z-index:"+(f2eModalZIndex-1)+"' class='" + this.options.backdropClass + "'></div>");
+      $(this.options.container).append(this.$backdrop);
+      this.$backdrop.on('touchmove', () => {
+        return false;
+      });
+      if (this.options.backdrop === true) {
+        this.$backdrop.on('click', () => {
+          this.hide();
+        });
+      }
+    }
+    if(this.$element){
+      this.$modalContainer = this.$element;
+      this.$modalContainer.css('zIndex',f2eModalZIndex);
+      $(this.options.container).append(this.$modalContainer);
+      this.$element.on('click', '.modal-close', () => {
+        this.hide();
+      });
+      this._location();
+      return;
+    }
+
+    this.$modalContainer = $("<div style='z-index:"+f2eModalZIndex+"' class='" + this.options.containerClass + "'></div>");
     if (this.options.width) {
       this.$modalContainer.css("width", this.options.width);
     }
@@ -184,32 +143,43 @@ export default class Modal extends EventTarget{
       });
       for (let i in this.options.btn) {
         let $btn = $('<button>' + i + '</button>');
-        if (this.options.btn[i]) {
+
           $btn.on('click', (event) => {
-            this.options.btn[i].bind(this)(event);
+            if (this.options.btn[i]) {
+              if(this.options.mold=='prompt'){
+                this.options.btn[i].bind(this)(this.$input.val(),event);
+              }else{
+                this.options.btn[i].bind(this)(event);
+              }
+            }
+            this.hide()
+            setTimeout(()=>{
+              this.destroy()
+            },this.options.animationSpeed)
+
+
           });
-        }
+
 
         this.$modalFooter.append($btn);
         $btn = null;
       }
     }
 
-    $(this.options.container).append(this.$backdrop).append(this.$modalContainer);
-    this.$backdrop.on('touchmove', () => {
-      return false;
-    });
-    if (this.options.backdrop === true) {
-      this.$backdrop.on('click', () => {
-        this.hide();
-      });
-    } else if (!this.options.backdrop) {
-      this.$backdrop.remove();
-    }
+    $(this.options.container).append(this.$modalContainer);
 
     this.$modalContainer.on('click', '.modal-close', () => {
       this.hide();
     });
+    if(this.options.mold=='toast'){
+      this.$modalContainer.addClass(this.options.toastClass);
+    }
+    if(this.options.mold=='prompt'){
+      this.$input=$("<input class='modal-prompt' type='text'/>");
+      this.$input.val(this.options.value)
+      this.$modalContent.append(this.$input);
+    }
+    this._location();
   }
 
   _location() {
@@ -245,17 +215,34 @@ export default class Modal extends EventTarget{
     if(!this.$modalContainer.is(":hidden")){
       return;
     }
+    if(this.f2eModalZIndex<f2eModalZIndex){
+      f2eModalZIndex++;
+      this.f2eModalZIndex=f2eModalZIndex;
+      this.$modalContainer.css('zIndex',f2eModalZIndex);
+      if (this.options.backdrop) {
+        this.$backdrop.css('zIndex',f2eModalZIndex);
+      }
+    }
     this.$modalContainer.addClass(this.options.animation[0]).removeClass(this.options.animation[1]);
     if (this.options.backdrop) {
-      this.$backdrop.fadeOut(300);
+      this.$backdrop.fadeIn(300);
     }
-    this.$backdrop.fadeIn();
+
     this.$modalContainer.show();
     this._autoHideModal();
     this.emit("onShow", this);
     return this;
   }
-  hide() {
+  hide(fast) {
+    if(fast){
+      this._clearTimer();
+      this.$modalContainer.hide();
+      if (this.options.backdrop) {
+        this.$backdrop.hide();
+      }
+      this.emit("onHide", this);
+      return this;
+    }
     if(!this.$modalContainer||this.$modalContainer.is(":hidden")){
       return;
     }
@@ -264,7 +251,9 @@ export default class Modal extends EventTarget{
     this._timer.hideTimer = setTimeout(() => {
       this.$modalContainer.hide();
     }, this.options.animationSpeed);
-    this.$backdrop.fadeOut(300);
+    if (this.options.backdrop) {
+      this.$backdrop.fadeOut(300);
+    }
     this.emit("onHide", this);
     return this;
   }

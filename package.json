@@ -2,7 +2,7 @@
   "name": "@fastweb/modal",
   "version": "1.0.0",
   "description": "弹框&&模态框",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "travis-publish": "node node_modules/travis-release/"

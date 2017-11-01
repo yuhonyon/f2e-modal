@@ -1,1 +1,1 @@
-# 弹框模态框 [![Build Status](https://travis-ci.org/yuhonyon/f2e-modal.svg?branch=master)](https://travis-ci.org/yuhonyon/f2e-modal) [![npm](https://img.shields.io/npm/v/@fastweb/f2e-modal.svg)](https://www.npmjs.com/package/@fastweb/f2e-modal)
+# 弹框模态框 [![Build Status](https://travis-ci.org/yuhonyon/f2e-modal.svg?branch=master)](https://travis-ci.org/yuhonyon/f2e-modal) [![npm](https://img.shields.io/npm/v/@fastweb/modal.svg)](https://www.npmjs.com/package/@fastweb/modal)

@@ -1,198 +1,240 @@
-html{
+html {
   font-size: 37.5px;
 }
+
 .modal-backdrop {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 999;
-    background: rgba(0, 0, 0, .5);
-    width: 100%;
-    height: 100%;
-    display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, .5);
+  width: 100%;
+  height: 100%;
+  display: none;
 }
 
 .modal-container {
-    color: #333;
-    display: none;
-    position: fixed;
-    font-size: .43rem;
-    line-height: 1.5;
+
+  color: #333;
+  display: none;
+  position: fixed;
+  font-size: 0.43rem;
+  line-height: 1.5;
+  text-align: center;
+  z-index: 10000;
+  background: #fff;
+  width: 7.5rem;
+  max-width: 10rem;
+  border-radius: 0.106667rem;
+  box-shadow: 0.013333rem 0.013333rem 0.066667rem 0.026667rem rgba(0, 0, 0, .1);
+
+  &.center {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &.bottom {
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    border-radius: 0;
+  }
+
+  &.top {
+    width: 100%;
+    left: 0;
+    top: 0;
+  }
+
+  &.fadeIn {
+    animation: fadeIn 0.5s both;
+  }
+
+  &.fadeOut {
+    animation: fadeOut 0.5s both;
+  }
+
+  &.slideInDown {
+    animation: slideInDown 0.5s both;
+  }
+
+  &.slideOutDown {
+    animation: slideOutDown 0.5s both;
+  }
+
+  &.modal-toast {
+    background: rgba(0,0,0,.7);
+    color: #fff;
+    width: auto;
+
+    .modal-content {
+      padding: 0.3rem;
+      white-space: nowrap;
+    }
+  }
+
+  .modal-header {
+    padding: 0.16667rem 0.2rem;
     text-align: center;
-    z-index: 10000;
-    background: #fff;
-    width: 7.5rem;
-    max-width: 10rem;
-    border-radius: .106667rem;
-    box-shadow: 0.013333rem 0.013333rem 0.066667rem 0.026667rem rgba(0, 0, 0, .1);
-    &.center {
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+    border-bottom: 1px solid #ddd;
+  }
+
+  .modal-content {
+    min-height: 0.426667rem;
+    padding: 0.5rem;
+    text-align: center;
+    .modal-prompt{
+      box-sizing: border-box;
+      display: block;
+      width: 100%;
+      height: 0.9rem;
+      padding: 6px 12px;
+      font-size: 14px;
+      line-height: 1.42857143;
+      color: #555;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+      transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     }
-    &.bottom {
-        width: 100%;
-        left: 0;
-        bottom: 0;
-        border-radius: 0;
-    }
-    &.top {
-        width: 100%;
-        left: 0;
-        top: 0;
-    }
-    &.fadeIn {
-        animation: fadeIn .5s both;
-    }
-    &.fadeOut {
-        animation: fadeOut .5s both;
-    }
-    &.slideInDown {
-        animation: slideInDown .5s both;
-    }
-    &.slideOutDown {
-        animation: slideOutDown .5s both;
-    }
-    &.modal-toast{
-      background: rgba(0,0,0,.7);
-      color: #fff;
-      width:auto;
-      .modal-content{
-        padding: .3rem;
-        white-space: nowrap;
+    .modal-icon {
+      text-align: center;
+      margin-bottom: 0.4rem;
+      height: 0.8rem;
+
+      img {
+        width: auto;
+        height: 100%;
       }
     }
-    .modal-header {
-        padding: 0.16667rem 0.2rem;
-        text-align: center;
-        border-bottom: 1px solid #ddd;
-    }
-    .modal-content {
-        min-height: 0.426667rem;
-        padding: 0.5rem;
-        text-align: center;
-        .modal-icon {
-            text-align: center;
-            margin-bottom: 0.4rem;
-            height: .8rem;
-            img {
-                width: auto;
-                height: 100%;
-            }
-        }
-    }
+  }
 
-    .modal-footer {
-        padding: 0.066667rem 0.2rem;
-        text-align: center;
-        border-top: 1px solid #ddd;
-        button {
-            display: inline-block;
-            color: #09c;
-            border: 0;
-            text-align: center;
-            background: #fff;
-            padding: .133333rem 0.83rem;
-            font-size: .48rem;
-            color: #157dff;
-            &:nth-child(2n) {
-                color: #999;
-            }
-        }
+  .modal-footer {
+    padding: 0.066667rem 0.2rem;
+    text-align: center;
+    border-top: 1px solid #ddd;
+
+    button {
+      display: inline-block;
+      color: #09c;
+      border: 0;
+      text-align: center;
+      background: #fff;
+      padding: 0.133333rem 0.83rem;
+      font-size: 0.48rem;
+      color: #157dff;
+
+      &:nth-child(2n) {
+        color: #999;
+      }
     }
+  }
 }
 
 .subscribe-container {
-    background: transparent;
-    .modal-content {
-        padding: 0;
-        .subspend {
-            background: rgba(0, 0, 0, .5);
-            height: 1.6rem;
-            padding: .224rem .32rem;
-            overflow: hidden;
-            .subspend-logo {
-                float: left;
-                >img {
-                    width: 1.146667rem;
-                    height: auto;
-                    float: left;
-                }
-                >div {
-                    float: left;
-                    padding: 0.066667rem 0.133333rem;
-                    >strong {
-                        font-size: .4rem;
-                        color: #fff;
-                        display: block;
-                        text-align: left;
-                    }
-                    >span {
-                        font-size: .346667rem;
-                        color: #afafaf;
-                        display: block;
-                        text-align: left;
-                    }
-                }
-            }
-            .subspend-download {
-                float: right;
-                >a {
-                    float: left;
-                    margin-top: .26rem;
-                    >img {
-                        width: 2.2rem;
-                    }
-                }
-                .suspend-close {
-                    float: left;
-                    width: .5rem;
-                    margin-top: .34rem;
-                    margin-left: 0.2rem;
-                }
-            }
+  background: transparent;
+
+  .modal-content {
+    padding: 0;
+
+    .subspend {
+      background: rgba(0, 0, 0, .5);
+      height: 1.6rem;
+      padding: 0.224rem 0.32rem;
+      overflow: hidden;
+
+      .subspend-logo {
+        float: left;
+
+        > img {
+          width: 1.146667rem;
+          height: auto;
+          float: left;
         }
-    }
-}
 
+        > div {
+          float: left;
+          padding: 0.066667rem 0.133333rem;
+
+          > strong {
+            font-size: 0.4rem;
+            color: #fff;
+            display: block;
+            text-align: left;
+          }
+
+          > span {
+            font-size: 0.346667rem;
+            color: #afafaf;
+            display: block;
+            text-align: left;
+          }
+        }
+      }
+
+      .subspend-download {
+        float: right;
+
+        > a {
+          float: left;
+          margin-top: 0.26rem;
+
+          > img {
+            width: 2.2rem;
+          }
+        }
+
+        .suspend-close {
+          float: left;
+          width: 0.5rem;
+          margin-top: 0.34rem;
+          margin-left: 0.2rem;
+        }
+      }
+    }
+  }
+}
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
+  from {
+    opacity: 0;
+  }
 
+  to {
+    opacity: 1;
+  }
+}
 @keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}
+  from {
+    opacity: 1;
+  }
 
+  to {
+    opacity: 0;
+  }
+}
 @keyframes slideInDown {
-    from {
-        -webkit-transform: translate3d(0, 100%, 0);
-        transform: translate3d(0, 100%, 0);
-        visibility: visible;
-    }
-    to {
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-    }
-}
+  from {
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+  }
 
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
 @keyframes slideOutDown {
-    from {
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-    }
-    to {
-        visibility: hidden;
-        -webkit-transform: translate3d(0, 100%, 0);
-        transform: translate3d(0, 100%, 0);
-    }
+  from {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    visibility: hidden;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
 }
